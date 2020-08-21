@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+
+<generatorConfiguration>
+    <!-- 配置一个代码生成操作，如果生成的目录或是数据库不一样，只需要参考增加一个context节点即可 -->
+    <context id="context1">
+        <!-- 生成 Controller 与 Service 类 -->
+        <plugin type="com.mybatis.generator.plugins.ControllerServicePlugin">
+            <!-- 是否生成 Controller 与 Service 类 -->
+            <property name="generate.controller.service" value="true"/>
+            <property name="targetProject" value="src/main/java"/>
+            <property name="service.package" value="cn.zheng.service"/>
+            <!-- Controller 的包路径 -->
+            <property name="web.package" value="cn.zheng.controller"/>
+        </plugin>
+
+        <!-- 生成的POJO实现java.io.Serializable接口 -->
+<!--        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />-->
+        <plugin type="com.mybatis.generator.plugins.LombokPlugin" >
+            <property name="hasLombok" value="true"/>
+        </plugin>
+
+        <commentGenerator type="com.mybatis.generator.plugins.CommentPlugin"  >
+            <property name="suppressAllComments" value="false"/><!-- 是否取消注释 -->
+            <property name="suppressDate" value="false" /> <!-- 是否生成注释代时间戳-->
+<!--            <property name="addRemarkComments" value="true"/>-->
+        </commentGenerator>
+
+
+        <!-- 配置数据库，driverClass请根据所使用的数据库配置 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/db?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true"
+                        userId="username"
+                        password="password">
+            <!--设置为 true 可以获取 tables 信息, 解决生成文件缺少 xxxByPrimaryKey 的问题 -->
+            <property name="useInformationSchema" value="true"/>
+        </jdbcConnection>
+
+        <!--指定生成的类型为java类型，避免数据库中number等类型字段 -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 配置实体类、example类生成的路径 -->
+        <javaModelGenerator targetPackage="cn.zheng.model.dto" targetProject="src/main/java">
+            <property  name="enableSubPackages"  value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+
+        <!-- 配置mapper.xml文件生成的路径(注：此处的targetPackage只要在base/mybatis/后面设置上面类文件包路径中最后一个名称就可以了) -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property  name="enableSubPackages"  value="true"/>
+        </sqlMapGenerator>
+
+        <!--自动生成的*Mapper.java存放路径 -->
+        <javaClientGenerator targetPackage="cn.zheng.dao" type="XMLMAPPER"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages"  value="true"/>
+        </javaClientGenerator>
+
+        <!--生成表修改这里-->
+        <!--数据库中对应的表，生成的类名，以及配置自动生成方法有哪些的参数-->
+        <table  tableName="db_user"  domainObjectName="User"
+                enableInsert="true" enableUpdateByPrimaryKey="true"
+                enableDeleteByPrimaryKey="true" enableSelectByPrimaryKey="true"
+                enableCountByExample="false"   enableUpdateByExample="false"
+                enableDeleteByExample="false"  enableSelectByExample="false"
+                selectByExampleQueryId="false">
+<!--            如果实体类要继承某个基类，增加rootClass-->
+            <property name="rootClass" value="cn.zheng.model.BaseEntity"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
+
